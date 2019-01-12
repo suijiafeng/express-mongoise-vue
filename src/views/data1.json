@@ -1,0 +1,10 @@
+{
+    "_id": {
+        "$oid": "5c204ba8c6133b3dac4f44b4"
+    },
+    "name": "kobe",
+    "age": {
+        "$numberInt": "20"
+    },
+    "country": "China"
+}
