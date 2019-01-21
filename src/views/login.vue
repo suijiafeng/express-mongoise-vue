@@ -47,6 +47,7 @@
 </template>
 <script>
 import jwt_decode from "jwt-decode";
+import md5 from "js-md5";
 export default {
   name: "login",
   data() {
@@ -75,30 +76,39 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$axios.post("/api/login", this.loginUser).then(res => {
-            if(res.data.code==0){
-              
-            
-            // 登录成功
-            const { token } = res.data;
-            localStorage.setItem("eleToken", token);
-            // 解析token
-            const decode = jwt_decode(token);
+          let loginUser = {
+            email: this.loginUser.email,
+            password: md5(this.loginUser.password)
+          };
+          this.$axios.post("/api/login", loginUser).then(res => {
+            if (res.data.code == 0) {
+              this.$message({
+                message: res.data.message,
+                type: "success"
+              });
 
-            // 存储数据
-            this.$store.dispatch("setIsAutnenticated", !this.isEmpty(decode));
-            this.$store.dispatch("setUser", decode);
+              setTimeout(() => {
+                this.$router.push({ path: "/home" });
+              },5000);
+              // 登录成功
+              const { token } = res.data.data;
+              localStorage.setItem("eleToken", token);
+              // 解析token
+              const decode = jwt_decode(token);
 
-            // 页面跳转
-            this.$router.push("/index");
-          }else{
-            this.$message({
-              type:"warning",
-              message:res.data.message
-            })
-          }
-          }
-          );
+              // 存储数据
+              this.$store.dispatch("setIsAutnenticated", !this.isEmpty(decode));
+              this.$store.dispatch("setUser", decode);
+
+              // 页面跳转
+              // this.$router.push({ path: "/home" });
+            } else {
+              this.$message({
+                type: "warning",
+                message: res.data.message
+              });
+            }
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -121,7 +131,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100vh;
-  background: url(../assets/bg.jpg) no-repeat center center;
+  background: url(../assets/bg1.png) no-repeat center center;
   background-size: 100% 100%;
 }
 .form_container {

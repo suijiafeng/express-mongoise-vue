@@ -1,14 +1,13 @@
 <template>
   <div id="app">
-   <!-- <navcard/> -->
     <router-view/>
   </div>
 </template>
 <script>
-import navcard from './views/navcard'
+
 export default {
   components:{
-    navcard
+
   },
   data(){
     return{

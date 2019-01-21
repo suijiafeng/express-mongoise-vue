@@ -25,11 +25,23 @@ export default new Router({
       component: () => import('./views/qureyUser')
 
     },
-    //  {
-    //   path: '/test2',
-    //   name: "test2",
-    //   component: resolve=>require(['./views/test2'],resolve)
+     {
+      path: '/home',
+      name: "home",
+      component: resolve=>require(['./views/home'],resolve)
 
-    // }
+    },
+     {
+      path: '/layout',
+      name: "layout",
+      component: resolve=>require(['./views/layout'],resolve)
+
+    },
+     {
+      path: '*',
+      name: "404",
+      component: resolve=>require(['./views/404'],resolve)
+
+    }
   ]
 })

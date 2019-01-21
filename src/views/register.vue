@@ -151,8 +151,6 @@ export default {
             identity: this.registerUser.identity,
             createDate: new Date().getTime()
           };
-          console.log(registerUser)
-          alert("ting")
           // let registerUser = Object.assign(createDate, this.registerUser);
           this.$axios.post("/api/register", registerUser).then(res => {
             if (res.data.code == 0) {
@@ -188,7 +186,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100vh;
-  background: url(../assets/bg.jpg) no-repeat center center;
+  background: url(../assets/bg1.png) no-repeat center center;
   background-size: 100% 100%;
 }
 .form_container {

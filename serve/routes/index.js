@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var md5 = require("js-md5")
+var 
 // var db = require('../db')
 var mySchema = require("../db/mySchema")
 var regSchema = require("../db/regSchema")
@@ -22,14 +24,15 @@ router.get('/tableTree', function(req, res, next) {
 });
 router.post('/login', function(req, res, next) {
   let data = req.body
-  regSchema.findOne({userName:data.userName},function(err,docs){
+  regSchema.findOne({email:data.email},function(err,docs){
     if(err){
       console.log(err)
     }else{
       if(docs!==null){
-      if(docs.pwd===data.pwd){
+        // let md5Password= md5(data.password)
+      if(docs.password===data.password){
         res.json({
-          code:'ok',
+          code:'0',
           data:'成功',
           message:'登录成功'
         });
