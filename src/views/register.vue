@@ -1,110 +1,128 @@
 <template>
-  <div class="register"  @keyup.enter="submitForm('ruleForm2')">
-    <el-card class="box-card" >
-      <div slot="header">
-        <p>用户注册</p>
-        <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
+  <div class="register">
+    <section class="form_container">
+      <div class="manage_tip">
+        <span class="title">火星人登月后台管理系统</span>
       </div>
       <el-form
-        :model="ruleForm2"
-        status-icon
-        :rules="rules2"
-        label-position="left"
+        :model="registerUser"
+        :rules="rules"
+        class="registerForm"
+        ref="registerForm"
         label-width="80px"
-        ref="ruleForm2"
-        class="demo-ruleForm"
       >
         <el-form-item
-          label="账号"
-          prop="account"
+          label="用户名"
+          prop="name"
         >
-          <el-input v-model.number="ruleForm2.account"></el-input>
+          <el-input
+            v-model="registerUser.name"
+            placeholder="请输入用户名"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="邮箱"
+          prop="email"
+        >
+          <el-input
+            v-model="registerUser.email"
+            placeholder="请输入邮箱"
+          ></el-input>
         </el-form-item>
         <el-form-item
           label="密码"
-          prop="pass"
+          prop="password"
         >
           <el-input
+            v-model="registerUser.password"
+            placeholder="请输入密码"
             type="password"
-            v-model="ruleForm2.pass"
-            autocomplete="off"
           ></el-input>
         </el-form-item>
         <el-form-item
           label="确认密码"
-          prop="checkPass"
-          
+          prop="password2"
         >
           <el-input
+            v-model="registerUser.password2"
+            placeholder="请确认密码"
             type="password"
-            v-model="ruleForm2.checkPass"
-            autocomplete="off"
           ></el-input>
         </el-form-item>
-
+        <el-form-item label="选择身份">
+          <el-select
+            v-model="registerUser.identity"
+            placeholder="请选择身份"
+          >
+            <el-option
+              label="管理员"
+              value="manager"
+            ></el-option>
+            <el-option
+              label="员工"
+              value="employee"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
-
-            @click="submitForm('ruleForm2')"
-          >注册</el-button>
-          <el-button @click="resetForm('ruleForm2')">重置</el-button>
+            class="submit_btn"
+            @click="submitForm('registerForm')"
+          >注 册</el-button>
         </el-form-item>
       </el-form>
-    </el-card>
+    </section>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-
+import md5 from "js-md5";
 export default {
   name: "register",
   data() {
-    var checkAge = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error("账号不能为空"));
-      }
-      setTimeout(() => {
-        if (Number.isInteger(value)) {
-          callback(new Error("请输入请不要输入纯数字"));
-        } else {
-          if (value.length < 8) {
-            callback(new Error("必须满8个字符"));
-          } else {
-            callback();
-          }
-        }
-      }, 1000);
-    };
-    var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.ruleForm2.checkPass !== "") {
-          this.$refs.ruleForm2.validateField("checkPass");
-        }
-        callback();
-      }
-    };
     var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm2.pass) {
+      if (value !== this.registerUser.password) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
       }
     };
     return {
-      ruleForm2: {
-        pass: "",
-        account: ""
+      registerUser: {
+        name: "",
+        email: "",
+        password: "",
+        identity: ""
       },
-      rules2: {
-        pass: [{ validator: validatePass, trigger: "change" }],
-        checkPass: [{ validator: validatePass2, trigger: "change" }],
-        account: [{ validator: checkAge, trigger: "change" }]
+      rules: {
+        name: [
+          { required: true, message: "用户名不能为空", trigger: "change" },
+          { min: 2, max: 30, message: "长度在 2 到 30 个字符", trigger: "blur" }
+        ],
+        email: [
+          {
+            type: "email",
+            required: true,
+            message: "邮箱格式不正确",
+            trigger: "blur"
+          }
+        ],
+        password: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+          { min: 6, max: 30, message: "长度在 6 到 30 个字符", trigger: "blur" }
+        ],
+        password2: [
+          { required: true, message: "确认密码不能为空", trigger: "blur" },
+          {
+            min: 6,
+            max: 30,
+            message: "长度在 6 到 30 个字符",
+            trigger: "blur"
+          },
+          { validator: validatePass2, trigger: "blur" }
+        ]
       }
     };
   },
@@ -125,31 +143,33 @@ export default {
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
-        let data = {
-          userName:this.ruleForm2.account,
-          pwd:this.ruleForm2.pass,
-          t:new Date().getTime()
-        };
         if (valid) {
-          this.axios
-            .post("/api/register", data)
-            .then(res => {
-              if (res.data.code === "ok") {
-                this.$message({
-                  message: res.data.message,
-                  type: "success"
-                });
-                this.$router.push({path:"qureyUser"})
-              }else {
-                //  this.ruleForm2={}
-                 this.$message({
-                  message: res.data.message,
-                  type: "warning"
-                });
-              }
-              console.log("提交", data);
-            })
-            .catch(err => {});
+          const  registerUser  = {
+            name: this.registerUser.name,
+            email: this.registerUser.email,
+            password: md5(this.registerUser.password),
+            identity: this.registerUser.identity,
+            createDate: new Date().getTime()
+          };
+          console.log(registerUser)
+          alert("ting")
+          // let registerUser = Object.assign(createDate, this.registerUser);
+          this.$axios.post("/api/register", registerUser).then(res => {
+            if (res.data.code == 0) {
+              // 注册成功
+              this.$message({
+                message: "注册成功！",
+                type: "success"
+              });
+              this.$router.push({ name: "qureyUser", params: { t: "1234" } });
+            } else {
+              this.$message({
+                type: "warning",
+                message: res.data.message
+              });
+            }
+            // this.$router.push("/login");
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -165,11 +185,38 @@ export default {
 
 <style lang="less">
 .register {
-  display: flex;
-  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: url(../assets/bg.jpg) no-repeat center center;
+  background-size: 100% 100%;
 }
-.box-card {
-  width: 400px;
+.form_container {
+  width: 370px;
+  height: 210px;
+  position: absolute;
+  top: 10%;
+  left: 34%;
+  padding: 25px;
+  border-radius: 5px;
+  text-align: center;
+}
+.form_container .manage_tip .title {
+  font-family: "Microsoft YaHei";
+  font-weight: bold;
+  font-size: 26px;
+  color: #fff;
+}
+.registerForm {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 20px 40px 20px 20px;
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px #cccc;
+}
+
+.submit_btn {
+  width: 100%;
 }
 </style>
 

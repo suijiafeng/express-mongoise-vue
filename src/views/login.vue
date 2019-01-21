@@ -1,85 +1,163 @@
 <template>
   <div class="login">
-    <el-card class="box-card">
-      <div slot="header">
-        <p>用户登录</p>
-        <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
+    <section class="form_container">
+      <div class="manage_tip">
+        <span class="title">火星人登月后台管理系统</span>
       </div>
       <el-form
-        :model="loginForm"
-        status-icon
-        label-position="left"
-        label-width="80px"
-        class="demo-ruleForm"
+        :model="loginUser"
+        :rules="rules"
+        ref="loginForm"
+        class="loginForm"
+        label-width="60px"
       >
         <el-form-item
-          label="账号"
-          prop="account"
+          label="邮箱"
+          prop="email"
         >
-          <el-input v-model.trim="loginForm.userName"></el-input>
+          <el-input
+            v-model="loginUser.email"
+            placeholder="请输入邮箱"
+          ></el-input>
         </el-form-item>
         <el-form-item
           label="密码"
-          prop="pass"
+          prop="password"
         >
           <el-input
+            v-model="loginUser.password"
+            placeholder="请输入密码"
             type="password"
-            autocomplete="off"
-            v-model.trim="loginForm.pwd"
           ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
-            @click="login('ruleForm2')"
-          >登录</el-button>
-          <el-button @click="resetForm('ruleForm2')">重置</el-button>
+            @click="submitForm('loginForm')"
+            class="submit_btn"
+          >登 录</el-button>
         </el-form-item>
+        <div class="tiparea">
+          <p>还没有账号？现在<router-link to='/register'>注册</router-link>
+          </p>
+        </div>
       </el-form>
-    </el-card>
+    </section>
   </div>
 </template>
 <script>
+import jwt_decode from "jwt-decode";
 export default {
   name: "login",
   data() {
     return {
-      loginForm: {}
+      loginUser: {
+        email: "",
+        password: ""
+      },
+      rules: {
+        email: [
+          {
+            type: "email",
+            required: true,
+            message: "邮箱格式不正确",
+            trigger: "change"
+          }
+        ],
+        password: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+          { min: 6, max: 30, message: "长度在 6 到 30 个字符", trigger: "blur" }
+        ]
+      }
     };
   },
   methods: {
-    login() {
-      let data = this.loginForm;
-      this.axios
-        .post("/api/login", data)
-        .then(res => {
-          if ((res.data.code === "ok")) {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$axios.post("/api/login", this.loginUser).then(res => {
+            if(res.data.code==0){
+              
+            
+            // 登录成功
+            const { token } = res.data;
+            localStorage.setItem("eleToken", token);
+            // 解析token
+            const decode = jwt_decode(token);
+
+            // 存储数据
+            this.$store.dispatch("setIsAutnenticated", !this.isEmpty(decode));
+            this.$store.dispatch("setUser", decode);
+
+            // 页面跳转
+            this.$router.push("/index");
+          }else{
             this.$message({
-              message: res.data.message,
-              type: "success"
-            });
-          } else {
-            this.$message({
-              message: res.data.message,
-              type: "warning"
-            });
+              type:"warning",
+              message:res.data.message
+            })
           }
-          console.log(data);
-        })
-        .catch(err => {
-          console.log("err", err);
-        });
+          }
+          );
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
-    resetForm() {
-      console.log("haha");
+    isEmpty(value) {
+      return (
+        value === undefined ||
+        value === null ||
+        (typeof value === "object" && Object.keys(value).length === 0) ||
+        (typeof value === "string" && value.trim().length === 0)
+      );
     }
   }
 };
 </script>
 <style lang="less" scoped>
 .login {
-  display: flex;
-  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: url(../assets/bg.jpg) no-repeat center center;
+  background-size: 100% 100%;
+}
+.form_container {
+  width: 370px;
+  height: 210px;
+  position: absolute;
+  top: 20%;
+  left: 34%;
+  padding: 25px;
+  border-radius: 5px;
+  text-align: center;
+}
+.form_container .manage_tip .title {
+  font-family: "Microsoft YaHei";
+  font-weight: bold;
+  font-size: 26px;
+  color: #fff;
+}
+.loginForm {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 20px 40px 20px 20px;
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px #cccc;
+}
+
+.submit_btn {
+  width: 100%;
+}
+.tiparea {
+  text-align: right;
+  font-size: 12px;
+  color: #333;
+}
+.tiparea p a {
+  color: #409eff;
 }
 </style>
 

@@ -59,7 +59,7 @@ router.post('/login', function(req, res, next) {
 router.post('/register', function(req, res, next){
   let data=req.body
   const reg = new regSchema(data)
-  regSchema.find({userName:data.userName},function(err,docs){
+  regSchema.find({name:data.name},function(err,docs){
     if(err){
       console.log(err)
     }else{
@@ -67,7 +67,7 @@ router.post('/register', function(req, res, next){
         res.json({
             code:'bad',
             data:"注册失败",
-            message:'该用户名已使用',
+            message: `该"${req.body.name}"用户名已被占用`,
             t:new Date().getTime()
           });
 
@@ -79,14 +79,7 @@ router.post('/register', function(req, res, next){
         // }else {
         //   console.log("保存成功")
         // }
-        regSchema.create(
-          {
-            employee_name: "newData.emp_name",
-            employee_no: "newData.emp_no",
-            month:" newData.month",
-            overtime_date: "newData.addDates.rmArr(newData.rmDates)"
-        
-        },err=>{
+        regSchema.create(data,err=>{
         if(err){
           console.log("err",err)
         }else {
@@ -94,14 +87,14 @@ router.post('/register', function(req, res, next){
         }
       })
       res.json({
-        code:'ok',
+        code:'0',
         data:[],
         message:'注册成功',
         t:new Date().getTime()
       });
     }}
-    console.log(docs.length)
-    console.log(typeof docs)
+    // console.log(docs.length)
+    // console.log(typeof docs)
   
     
   })

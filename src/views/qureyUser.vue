@@ -14,19 +14,29 @@
       >
       </el-table-column>
     <el-table-column
-      prop="userName"
+      prop="name"
       align="center"
-      label="姓名"
+      label="用户名"
        
       >
     </el-table-column>
     <el-table-column
-      prop="pwd"
+      prop="email"
+      align="center"
+      label="邮箱">
+    </el-table-column>
+    <el-table-column
+      prop="identity"
+      align="center"
+      label="头衔">
+    </el-table-column>
+    <el-table-column
+      prop="password"
       align="center"
       label="密码">
     </el-table-column>
      <el-table-column
-      prop="t"
+      prop="createDate"
       align="center"
       label="注册日期"
       >
@@ -87,7 +97,7 @@ export default {
                 console.log(this.tableData3)
 
             }).catch(err=>{
-
+                console.log("err",err)
             })
         }
     }

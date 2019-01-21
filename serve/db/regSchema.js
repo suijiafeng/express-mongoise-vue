@@ -3,9 +3,12 @@ const db = require("./index")
 const Schema = mongoose.Schema
 
 const user = new Schema({
-    userName:String,
-    pwd:String,
-    t:Date
+    email:String,
+    identity: String,
+    name: String,
+    password: String,
+    password2: String,
+    createDate:Date
 
 })
 
