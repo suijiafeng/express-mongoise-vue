@@ -46,7 +46,7 @@
   </div>
 </template>
 <script>
-import jwt_decode from "jwt-decode";
+import jwt from "jsonwebtoken";
 import md5 from "js-md5";
 export default {
   name: "login",
@@ -74,41 +74,58 @@ export default {
   },
   methods: {
     submitForm(formName) {
+     
       this.$refs[formName].validate(valid => {
         if (valid) {
           let loginUser = {
             email: this.loginUser.email,
             password: md5(this.loginUser.password)
           };
-          this.$axios.post("/api/login", loginUser).then(res => {
-            if (res.data.code == 0) {
-              this.$message({
-                message: res.data.message,
-                type: "success"
-              });
+          this.$axios
+            .post("/api/login", loginUser)
+            .then(res => {
+              if (res.data.code == 0) {
+                this.$message({
+                  message: res.data.message,
+                  type: "success"
+                });
 
-              setTimeout(() => {
-                this.$router.push({ path: "/home" });
-              },5000);
-              // 登录成功
-              const { token } = res.data.data;
-              localStorage.setItem("eleToken", token);
-              // 解析token
-              const decode = jwt_decode(token);
+                setTimeout(() => {
+                  this.$router.push({ path: "/home" });
+                }, 1000);
+                // 登录成功
+                const token  = res.data.token;
+                localStorage.setItem("eleToken", token);
+                 sessionStorage.setItem('userInfo',JSON.stringify(res.data.data))
+                // 解析token
+                let secretOrPrivateKey="suiyi" // 这是加密的key（密钥） 
+                const decode = jwt.verify(token,secretOrPrivateKey);
+                // sessionStorage.setItem("userInfo",JSON.stringify(decode))
+                console.log("解密",decode)
 
-              // 存储数据
-              this.$store.dispatch("setIsAutnenticated", !this.isEmpty(decode));
-              this.$store.dispatch("setUser", decode);
+                // 存储数据
+                this.$store.dispatch(
+                  "setIsAutnenticated",
+                  !this.isEmpty(decode)
+                );
+                this.$store.dispatch("setUser", decode);
 
-              // 页面跳转
-              // this.$router.push({ path: "/home" });
-            } else {
-              this.$message({
-                type: "warning",
-                message: res.data.message
-              });
-            }
-          });
+                // 页面跳转
+                // this.$router.push({ path: "/home" });
+              } else {
+                this.$message({
+                  type: "warning",
+                  message: res.data.message
+                });
+              }
+            })
+            .catch(err => {
+              console.log("111111",err)
+              // this.$message({
+              //   message: "服务端连接失败",
+              //   type: "error"
+              // });
+            });
         } else {
           console.log("error submit!!");
           return false;

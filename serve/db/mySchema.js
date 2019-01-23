@@ -4,8 +4,11 @@ const Schema = mongoose.Schema
 
 const healthSchema = new Schema({
     name:String,
-    age:Number,
-    student:Boolean,
+    describe:String,
+    expend:Number,
+    income:Number,
+    cash:Number,
+    remark:Number,
     date:Date
 
 })

@@ -7,7 +7,7 @@ const user = new Schema({
     identity: String,
     name: String,
     password: String,
-    password2: String,
+    token: String,
     createDate:Date
 
 })

@@ -153,10 +153,11 @@ export default {
           };
           // let registerUser = Object.assign(createDate, this.registerUser);
           this.$axios.post("/api/register", registerUser).then(res => {
+           
             if (res.data.code == 0) {
               // 注册成功
               this.$message({
-                message: "注册成功！",
+                message: res.data.message,
                 type: "success"
               });
               this.$router.push({ name: "qureyUser", params: { t: "1234" } });
@@ -167,6 +168,11 @@ export default {
               });
             }
             // this.$router.push("/login");
+         }).catch(err=>{
+            this.$message({
+              message:"服务端连接失败",
+              type:"error"
+            })
           });
         } else {
           console.log("error submit!!");

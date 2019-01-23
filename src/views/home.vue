@@ -1,25 +1,50 @@
 <template>
-    <div class="home">
-        <div class="container">
-            <h1 class="title">外星服务站</h1>
-            <p class="lead"> 专注于线上教育, 用心做课程, 用心做服务! </p>
-        </div>
+  <div
+    class="home"
+    :class="{'isCollage':isCollage}"
+  >
+    <div class="container">
+      <h1 class="title">外星服务站</h1>
+      <p class="lead"> 专注未知世界探索，传递人类文明火炬! </p>
     </div>
+    <foundList />
+  </div>
 </template>
+<script>
+export default {
+  data() {
+    return {};
+  },
+  props: {
+    isCollage: {
+      type: Boolean,
+      default: true
+    }
+  },
+  components: {
+    foundList: () => import("../components/foundList")
+  }
+};
+</script>
 
 <style scoped>
 .home {
   width: 100%;
   height: 100%;
-  background: url(../assets/showcase.png) no-repeat;
+  box-sizing: border-box;
+  padding-left: 180px;
+  transition: all 0.5s;
   background-size: 100% 100%;
+}
+.isCollage {
+  padding-left: 55px;
 }
 .container {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding-top: 100px;
-  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 0;
+  background: url(../assets/showcase.png) no-repeat;
   text-align: center;
   color: white;
 }

@@ -1,7 +1,8 @@
 <template>
   <div>
-<head-nav/>
-<aside-menu/>
+    <head-nav />
+    <aside-menu @isCollage="toCollage" />
+    <router-view :isCollage="isCollage" />
   </div>
 </template>
 
@@ -14,7 +15,14 @@ export default {
     asideMenu
   },
   data() {
-    return {};
+    return {
+      isCollage: true
+    };
+  },
+  methods: {
+    toCollage(e) {
+      this.isCollage = e;
+    }
   }
 };
 </script>

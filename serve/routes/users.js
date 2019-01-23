@@ -1,12 +1,25 @@
 var express = require('express');
 var router = express.Router();
 var regSchema = require("../db/regSchema")
-
+var jwt = require("jsonwebtoken")
 /* GET users listing. */
+
+router.post('/user_Auth',(req,res,next)=>{
+  let auth=req.headers.authorization
+  console.log(auth)
+  res.json({name:"Ddddddd"})
+})
+
+
 router.get('/userList', function(req, res, next) {
+ 
   regSchema.find({},function(err,docs){
     console.log(docs)
-    if(!err){
+    let auth = req.headers.authorization
+    let isAuth= (docs[0].token===auth?true:false)
+    console.log("auth",isAuth)
+   
+    if(!err&&isAuth){
       res.json({
         code:"ok",
         data:docs,

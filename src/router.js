@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import register from './views/register.vue'
-import { resolve } from 'q';
+import {
+  resolve
+} from 'q';
 
 Vue.use(Router)
 
@@ -19,28 +21,34 @@ export default new Router({
       // which is lazy-loaded when the route is visited.
       component: () => import( /* webpackChunkName: "about" */ './views/login.vue')
     },
-     {
+    {
       path: '/qureyUser',
       name: "qureyUser",
       component: () => import('./views/qureyUser')
 
     },
-     {
-      path: '/home',
-      name: "home",
-      component: resolve=>require(['./views/home'],resolve)
+    // {
+    //   path: '/home',
+    //   name: "home",
+    //   component: resolve => require(['./views/home'], resolve)
 
-    },
-     {
+    // },
+    {
       path: '/layout',
       name: "layout",
-      component: resolve=>require(['./views/layout'],resolve)
+      redirect:'/home',
+      component: resolve => require(['./views/layout'], resolve),
+      children: [{
+        path: "/home",
+        name: "home",
+        component:()=>import('./views/home')
+      }]
 
     },
-     {
+    {
       path: '*',
       name: "404",
-      component: resolve=>require(['./views/404'],resolve)
+      component: resolve => require(['./views/404'], resolve)
 
     }
   ]

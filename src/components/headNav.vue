@@ -1,53 +1,60 @@
 <template>
-    <header class="head-nav">
-        <el-row>
-            <el-col :span="6" class='logo-container'>
-                <img src="../assets/logo.png" class='logo' alt="">
-                <span class='title'>火星人登月后台管理系统</span>
-            </el-col>
-            <el-col :span='6' class="user">
-                <div class="userinfo">
-                    <!-- <img :src="user.avatar" class='avatar' alt=""> -->
-                     <div class='welcome'>
-                        <p class='name comename'>欢迎</p>
-                        <p class='name avatarname'>{{user.name}}</p>
-                    </div>
-                    <span class='username'>
-                        <el-dropdown
-                                trigger="click"
-                                @command='setDialogInfo'>
-                            <span class="el-dropdown-link">
-                                <i class="el-icon-caret-bottom el-icon--right"></i>
-                            </span>
-                            <el-dropdown-menu slot="dropdown">
-                                <el-dropdown-item command='info'>个人信息</el-dropdown-item>
-                                <el-dropdown-item  command='logout'>退出</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </el-dropdown>
-                     </span>
-                </div>
-            </el-col>
+  <header class="head-nav">
+    <el-row>
+      <el-col
+        :span="6"
+        class='logo-container'
+      >
+        <img
+          src="../assets/logo.png"
+          class='logo'
+          alt=""
+        >
+        <span class='title'>火星人登月后台管理系统</span>
+      </el-col>
+      <el-col
+        :span='6'
+        class="user"
+      >
+        <div class="userinfo">
+          <!-- <img :src="user.avatar" class='avatar' alt=""> -->
+          <div class='welcome'>
+            <span class='name comename'>欢迎</span>,
+            <span class='name avatarname'>{{user.username}}</span>
+            <!-- <span class="name" style="margin-left:10px;">{{user.identity == 'manager' ? '女士' : '小姐'}}</span> -->
 
-        </el-row>
+          </div>
+          <span class='username'>
+            <el-dropdown
+              trigger="click"
+              @command='setDialogInfo'
+            >
+              <span class="el-dropdown-link">
+                <i class="el-icon-caret-bottom el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command='info'>个人信息</el-dropdown-item>
+                <el-dropdown-item command='logout'>退出</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </span>
+        </div>
+      </el-col>
 
-    </header>
+    </el-row>
+
+  </header>
 </template>
 <script>
 export default {
   name: "head-nav",
-  data(){
-    return{
-      user:{
-        name:"小明",
-
-
-      }
-    }
+  data() {
+    return {};
   },
   computed: {
-    // user() {
-    //   return this.$store.getters.user;
-    // }
+    user() {
+      return JSON.parse(sessionStorage.getItem("userInfo"));
+    }
   },
   methods: {
     setDialogInfo(cmditem) {
@@ -85,8 +92,9 @@ export default {
 .head-nav {
   width: 100%;
   height: 60px;
+  /* box-sizing: border-box; */
   min-width: 600px;
-  padding: 5px;
+  padding: 5px 0;
   background: #324057;
   color: #fff;
   border-bottom: 1px solid #1f2d3d;
@@ -133,7 +141,7 @@ export default {
   font-size: 14px;
 }
 .comename {
-  font-size: 12px;
+  font-size: 14px;
 }
 .avatarname {
   color: #409eff;

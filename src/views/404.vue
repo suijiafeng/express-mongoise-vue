@@ -9,13 +9,14 @@
 .nofind {
     margin-top:20vh;
   width: 100%;
-  height: 100%;
+     height: 20vh;
   overflow: hidden;
 }
 .nofind .text {
   font-size: 50px;
+  padding-top:20px;
   display: inline-block;
-  animation: textAniation 1s forwards infinite;
+  animation: textAniation 1s infinite ease-in-out;
  
 }
 
