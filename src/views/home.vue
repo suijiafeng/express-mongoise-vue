@@ -43,16 +43,18 @@ export default {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding: 5px 0;
+  padding: 10px 0;
+  margin-top:70px;
   background: url(../assets/showcase.png) no-repeat;
   text-align: center;
   color: white;
 }
 .title {
   font-size: 30px;
+  margin:0;
 }
 .lead {
-  margin-top: 50px;
-  font-size: 22px;
+  /* margin-top: 50px;
+  font-size: 22px; */
 }
 </style>

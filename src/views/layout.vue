@@ -2,7 +2,7 @@
   <div>
     <head-nav />
     <aside-menu @isCollage="toCollage" />
-    <router-view :isCollage="isCollage" />
+    <router-view  :isCollage="isCollage" />
   </div>
 </template>
 

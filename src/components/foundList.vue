@@ -40,14 +40,14 @@
                     width="70">
                 </el-table-column>
                 <el-table-column
-                    prop="date"
+                    prop="t"
                     label="创建时间"
                     align='center'
                     width="250"
                     sortable>
                     <template slot-scope="scope">
                         <el-icon name="time"></el-icon>
-                        <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                        <span style="margin-left: 10px">{{ scope.row.t }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column

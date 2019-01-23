@@ -7,41 +7,6 @@ var mySchema = require("../db/mySchema")
 var regSchema = require("../db/regSchema")
 
 /* GET home page. */
-
-router.get('/profile', function (req, res, next) {
-  mySchema.find(function (err, result) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.json({
-        code: 'ok',
-        data: [
-          {
-            type: "String",
-          describe: "String",
-          expend: 1,
-          income: 2,
-          cash: 3,
-          remark: 4,
-          date: new Date()
-        },
-          {
-            type: "String",
-          describe: "String",
-          expend: 2,
-          income: 3,
-          cash: 4,
-          remark: 5,
-          date: new Date()
-        }
-      ],
-        message: '请求成功'
-      });
-      console.log(result);
-    }
-  });
-
-});
 router.post('/login', function (req, res, next) {
   let data = req.body
   regSchema.findOne({

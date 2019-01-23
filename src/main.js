@@ -12,6 +12,14 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+
+router.afterEach((to, from) => {
+  let locale = localStorage.eleToken
+  if (!locale) {
+  router.push({ name: 'login' }); // 跳转login
+  }
+ });
+
 new Vue({
   router,
   store,

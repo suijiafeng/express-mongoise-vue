@@ -92,6 +92,9 @@ export default {
 .head-nav {
   width: 100%;
   height: 60px;
+  position:fixed;
+  top:0;
+   z-index: 10;
   /* box-sizing: border-box; */
   min-width: 600px;
   padding: 5px 0;
