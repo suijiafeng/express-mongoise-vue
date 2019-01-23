@@ -66,7 +66,7 @@
                     prop="income"
                     label="收入"
                     align='center'
-                    width="170"> 
+                    width="120"> 
                     <template slot-scope="scope">  
                         <span style="color:#00d053">+ {{ scope.row.income }}</span>
                     </template>
@@ -75,7 +75,7 @@
                     prop="expend"
                     label="支出"
                     align='center'
-                    width="170">
+                    width="120">
                     <template slot-scope="scope">  
                         <span style="color:#f56767">- {{ scope.row.expend }}</span>
                     </template>
@@ -84,7 +84,7 @@
                     prop="cash"
                     label="账户现金"
                     align='center'
-                    width="170">
+                    width="120">
                     <template slot-scope="scope">  
                         <span style="color:#4db3ff">{{ scope.row.cash }}</span>
                     </template>
@@ -93,14 +93,14 @@
                     prop="remark"
                     label="备注"
                     align='center'
-                    width="220">
+                    >
                 </el-table-column>
                 <el-table-column
                     prop="operation"
                     align='center'
                     label="操作"
                     fixed="right"
-                    width="180">
+                    width="160">
                     <template slot-scope='scope'>
                         <el-button 
                             type="warning" 
@@ -215,10 +215,26 @@ export default {
     },
     onDeleteMoney(row, index) {
       // 删除
-      this.$axios.delete(`/api/profile/delete/${row._id}`).then(res => {
-        this.$message("删除成功");
+       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+      this.$axios.post(`/api/profile/delete`,{_id:row._id}).then(res => {
+        if(res.data.code===0){
+          this.$message({
+            type:"success",
+            message:res.data.message
+          })
+        }else{
+           this.$message({
+            type:"warning",
+            message:res.data.message
+          })
+        }
         this.getProfile();
       });
+      })
     },
     onAddMoney() {
       // 添加

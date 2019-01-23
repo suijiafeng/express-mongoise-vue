@@ -8,7 +8,7 @@ const  profileSchema = new Schema({
     income: Number,
     expend: Number,
     cash: Number,
-    remark: Number,
+    remark: String,
     t: Date
 })
 

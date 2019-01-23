@@ -9,16 +9,14 @@ router.get('/', function (req, res, next) {
     } else {
       res.json({
         code: 'ok',
-        data:result,
+        data:[...result],
         message: '请求成功'
       });
-      console.log(result);
+      // console.log(result);
     }
   });
 
 });
-
-
 router.post('/addProfileData', (req, res, next) => {
   let addProfile = Object.assign({t:new Date()},req.body) 
   profileSchema.create(addProfile,function(err,docs){
@@ -29,9 +27,16 @@ router.post('/addProfileData', (req, res, next) => {
   })
 
   })
- 
-
-
 })
-
+router.post('/delete',(req,res,next)=>{
+  profileSchema.deleteOne(req.body,function(err,docs){
+   if(!err){
+    res.json({
+      code:0,
+      message:"删除成功",
+      data:[]
+    })
+   }
+  })
+})
 module.exports = router;
