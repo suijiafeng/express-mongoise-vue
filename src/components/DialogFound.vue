@@ -56,7 +56,7 @@
           >
             <el-input
               type="expend"
-             v-model.number="form.expend"
+              v-model.number="form.expend"
             ></el-input>
           </el-form-item>
 
@@ -100,17 +100,19 @@ export default {
   },
   data() {
     var checkNum = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('此处不能为空'));
+      var regExp = /^[0-9]\d*(\.\d*[0-9])?$/g;
+      var isNum = regExp.test(value);
+      if (!value) {
+        return callback(new Error("此处不能为空"));
+      }
+      setTimeout(() => {
+        if (!isNum) {
+          callback(new Error("请输入数字值"));
+        } else {
+          callback();
         }
-        setTimeout(() => {
-          if (!Number.isInteger(value)) {
-            callback(new Error('请输入数字值'));
-          } else {
-              callback();
-          }
-        }, 500);
-      };
+      }, 500);
+    };
     return {
       format_type_list: [
         "提现",
@@ -124,13 +126,9 @@ export default {
         describe: [
           { required: true, message: "收支描述不能为空！", trigger: "blur" }
         ],
-        income: [
-          { required: true,validator: checkNum, trigger: "blur" }
-        ],
-        expend: [
-          {required: true,validator: checkNum, trigger: "blur" }
-        ],
-        cash: [{ required: true,validator: checkNum, trigger: "blur" }]
+        income: [{ required: true, validator: checkNum, trigger: "blur" }],
+        expend: [{ required: true, validator: checkNum, trigger: "blur" }],
+        cash: [{ required: true, validator: checkNum, trigger: "blur" }]
       }
     };
   },
@@ -150,8 +148,8 @@ export default {
               });
               this.dialog.show = false;
               this.$emit("update");
-            }else{
-               this.$message({
+            } else {
+              this.$message({
                 message: res.data.message,
                 type: "warning"
               });

@@ -34,8 +34,6 @@ const mutations = {
   },
   userLogin(state,userName){
     state.user.name =userName
-    console.log(userName)
-
   },
   userLogout(state,userName){
     state.user.name =userName

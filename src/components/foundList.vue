@@ -47,7 +47,7 @@
                     sortable>
                     <template slot-scope="scope">
                         <el-icon name="time"></el-icon>
-                        <span style="margin-left: 10px">{{ scope.row.t }}</span>
+                        <span style="margin-left: 10px">{{ scope.row.t|datetime }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -142,6 +142,7 @@
 
 <script>
 import DialogFound from "../components/DialogFound";
+import {formatDate} from '@/utils/timeFormat'
 
 export default {
   name: "fundlist",
@@ -177,6 +178,12 @@ export default {
         endTime: ""
       }
     };
+  },filters:{
+    datetime(value){
+      let date = new Date(value)
+      return  formatDate(date,"yyyy-MM-dd hh:mm:ss")
+    }
+
   },
   components: {
     DialogFound
@@ -191,7 +198,6 @@ export default {
         this.tableData = res.data.data;
         this.allTableData = res.data;
         this.filterTableData = res.data;
-        console.log(this.tableData)
         // 设置分页数据
         // this.setPaginations();
       });
@@ -213,7 +219,7 @@ export default {
         id: row._id
       };
     },
-    onDeleteMoney(row, index) {
+    onDeleteMoney(row) {
       // 删除
        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
